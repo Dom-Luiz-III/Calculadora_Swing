@@ -2,6 +2,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
 
 public class CalculadoraSwing {
     private JFrame frame;
@@ -9,6 +11,8 @@ public class CalculadoraSwing {
 
     private double num1, num2;
     private String operador;
+    private boolean novoCalculo = true;
+    private DecimalFormat df;
 
     public CalculadoraSwing() {
         frame = new JFrame("Calculadora");
@@ -20,13 +24,14 @@ public class CalculadoraSwing {
         frame.add(textField, BorderLayout.NORTH);
 
         JPanel buttonPanel = new JPanel();
-        buttonPanel.setLayout(new GridLayout(4, 4));
+        buttonPanel.setLayout(new GridLayout(5, 4));
 
         String[] buttonLabels = {
-                "7", "8", "9", "/",
-                "4", "5", "6", "*",
+                "7", "8", "9", "÷",
+                "4", "5", "6", "x",
                 "1", "2", "3", "-",
-                "0", ".", "=", "+"
+                "0", ",", "=", "+",
+                "C"
         };
 
         for (String label : buttonLabels) {
@@ -37,42 +42,64 @@ public class CalculadoraSwing {
 
         frame.add(buttonPanel, BorderLayout.CENTER);
         frame.setVisible(true);
+
+        // Configure o formato decimal com vírgula como separador
+        DecimalFormatSymbols symbols = new DecimalFormatSymbols();
+        symbols.setDecimalSeparator(',');
+        df = new DecimalFormat("#.##########", symbols);
     }
 
     private class ButtonClickListener implements ActionListener {
         public void actionPerformed(ActionEvent e) {
             String command = e.getActionCommand();
 
-            if (command.matches("[0-9]")) {
-                textField.setText(textField.getText() + command);
-            } else if (command.equals(".")) {
-                if (!textField.getText().contains(".")) {
+            try {
+                if (command.matches("[0-9]") || (command.equals(",") && !textField.getText().contains(","))) {
+                    if (novoCalculo) {
+                        textField.setText("");
+                        novoCalculo = false;
+                    }
                     textField.setText(textField.getText() + command);
-                }
-            } else if (command.matches("[+\\-*/]")) {
-                num1 = Double.parseDouble(textField.getText());
-                operador = command;
-                textField.setText("");
-            } else if (command.equals("=")) {
-                num2 = Double.parseDouble(textField.getText());
-                double resultado = 0;
+                } else if (command.matches("[+\\-*/]")) {
+                    if (!novoCalculo) {
+                        num1 = df.parse(textField.getText()).doubleValue();
+                        operador = command;
+                        novoCalculo = true;
+                    }
+                } else if (command.equals("=")) {
+                    if (!novoCalculo) {
+                        num2 = df.parse(textField.getText()).doubleValue();
+                        double resultado = 0;
 
-                switch (operador) {
-                    case "+":
-                        resultado = num1 + num2;
-                        break;
-                    case "-":
-                        resultado = num1 - num2;
-                        break;
-                    case "*":
-                        resultado = num1 * num2;
-                        break;
-                    case "/":
-                        resultado = num1 / num2;
-                        break;
-                }
+                        switch (operador) {
+                            case "+":
+                                resultado = num1 + num2;
+                                break;
+                            case "-":
+                                resultado = num1 - num2;
+                                break;
+                            case "x":
+                                resultado = num1 * num2;
+                                break;
+                            case "÷":
+                                if (num2 != 0) {
+                                    resultado = num1 / num2;
+                                } else {
+                                    textField.setText("Erro: Divisão por zero");
+                                    return;
+                                }
+                                break;
+                        }
 
-                textField.setText(String.valueOf(resultado));
+                        textField.setText(df.format(resultado));
+                        novoCalculo = true;
+                    }
+                } else if (command.equals("C")) { // Limpar
+                    textField.setText("");
+                    novoCalculo = true;
+                }
+            } catch (Exception ex) {
+                textField.setText("Erro: Formato de número inválido");
             }
         }
     }
