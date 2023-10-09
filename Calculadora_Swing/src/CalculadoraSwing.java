@@ -1,9 +1,6 @@
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyAdapter;
+import java.awt.event.*;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.util.ArrayList;
@@ -23,7 +20,7 @@ public class CalculadoraSwing {
     private List<JButton> operatorButtons;
 
     public CalculadoraSwing() {
-        frame = new JFrame("Calculadora");
+        frame = new JFrame("Calculadora Swing");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(400, 500);
         frame.setLayout(new BorderLayout());
@@ -85,6 +82,11 @@ public class CalculadoraSwing {
     private JButton createButton(String label) {
         JButton button = new JButton(label);
         button.setFont(new Font("Arial", Font.PLAIN, 24));
+
+        button.setFocusPainted(false);
+        button.setBackground(Color.WHITE);
+        button.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
+        button.setPreferredSize(new Dimension(75, 75));
 
         if (label.matches("[0-9]") || label.equals(".")) {
             button.addActionListener(new ActionListener() {
@@ -180,19 +182,22 @@ public class CalculadoraSwing {
             currentNumber.setLength(0);
         }
 
-        while (!operatorStack.isEmpty()) {
-            double b = operandStack.pop();
-            double a = operandStack.pop();
-            char op = operatorStack.pop();
-            operandStack.push(performOperation(a, b, op));
-        }
+        if (!operatorStack.isEmpty() && operandStack.size() >= 2) {
+            while (!operatorStack.isEmpty()) {
+                double b = operandStack.pop();
+                double a = operandStack.pop();
+                char op = operatorStack.pop();
+                operandStack.push(performOperation(a, b, op));
+            }
 
-        if (!operandStack.isEmpty()) {
             double result = operandStack.pop();
             textField.setText(df.format(result));
             historyTextArea.append(textField.getText() + "\n");
             isResultDisplayed = true;
-            operandStack.push(result); // Mantém o resultado para uso em novos cálculos
+            operandStack.push(result);
+        } else {
+            textField.setText("Formato usado inválido!");
+            isResultDisplayed = true;
         }
     }
 
