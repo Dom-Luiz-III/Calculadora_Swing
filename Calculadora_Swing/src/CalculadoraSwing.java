@@ -6,6 +6,10 @@ import java.text.DecimalFormatSymbols;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
+import org.junit.*;
+import static org.junit.Assert.*;
+
+
 
 public class CalculadoraSwing {
     private final JTextField textField;
@@ -205,6 +209,68 @@ public class CalculadoraSwing {
         operandStack.clear();
         operatorStack.clear();
         isResultDisplayed = false;
+    }
+
+    // Primeiros testes com Junit
+    public class CalculadoraSwingTest {
+
+        private CalculadoraSwing calculadora;
+
+        @Before
+        public void setUp() {
+            calculadora = new CalculadoraSwing();
+        }
+
+        @Test
+        public void testeSoma() {
+            assertEquals(4.0, calculadora.performOperation(2.0, 2.0, '+'), 0.0001);
+        }
+
+        @Test
+        public void testeSubtracao() {
+            assertEquals(3.0, calculadora.performOperation(5.0, 2.0, '-'), 0.0001);
+        }
+
+        @Test
+        public void testeMultiplicacao() {
+            assertEquals(10.0, calculadora.performOperation(2.0, 5.0, '*'), 0.0001);
+        }
+
+        @Test
+        public void testeDivisao() {
+            assertEquals(2.5, calculadora.performOperation(5.0, 2.0, '/'), 0.0001);
+        }
+
+        @Test
+        public void testeDivisaoPorZero() {
+            assertEquals(0.0, calculadora.performOperation(5.0, 0.0, '/'), 0.0001);
+        }
+
+        @Test
+        public void testePrecedenciaMultiplicacaoDivisao() {
+            assertEquals(14.0, calculadora.performOperation(2.0, 3.0, '*'), 0.0001);
+            assertEquals(4.0, calculadora.performOperation(12.0, 3.0, '/'), 0.0001);
+        }
+
+        @Test
+        public void testePrecedenciaSomaSubtracao() {
+            assertEquals(5.0, calculadora.performOperation(2.0, 3.0, '+'), 0.0001);
+            assertEquals(-1.0, calculadora.performOperation(2.0, 3.0, '-'), 0.0001);
+        }
+
+        @Test
+        public void testeCalculoResultado() {
+            calculadora.performOperation(2.0, 3.0, '+');
+            calculadora.performOperation(5.0, '*', '=');
+            assertEquals(25.0, calculadora.operandStack.peek(), 0.0001);
+        }
+
+        @Test
+        public void testeCalculoResultadoInvalido() {
+            calculadora.performOperation(2.0, 3.0, '+');
+            calculadora.performOperation(5.0, '=', '*');
+            assertEquals(0, calculadora.operandStack.size());
+        }
     }
 
     public static void main(String[] args) {
