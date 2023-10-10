@@ -8,19 +8,18 @@ import java.util.List;
 import java.util.Stack;
 
 public class CalculadoraSwing {
-    private JFrame frame;
-    private JTextField textField;
-    private JTextArea historyTextArea;
-    private Stack<Double> operandStack;
-    private Stack<Character> operatorStack;
+    private final JTextField textField;
+    private final JTextArea historyTextArea;
+    private final Stack<Double> operandStack;
+    private final Stack<Character> operatorStack;
     private boolean newCalculation;
     private boolean isResultDisplayed;
-    private DecimalFormat df;
-    private StringBuilder currentNumber;
-    private List<JButton> operatorButtons;
+    private final DecimalFormat df;
+    private final StringBuilder currentNumber;
+    private final List<JButton> operatorButtons;
 
     public CalculadoraSwing() {
-        frame = new JFrame("Calculadora Swing");
+        JFrame frame = new JFrame("Calculadora Swing");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(400, 500);
         frame.setLayout(new BorderLayout());
@@ -60,7 +59,6 @@ public class CalculadoraSwing {
 
         frame.setVisible(true);
 
-        // Configure o formato decimal com vírgula como separador
         DecimalFormatSymbols symbols = new DecimalFormatSymbols();
         symbols.setDecimalSeparator(',');
         df = new DecimalFormat("#.##########", symbols);
@@ -142,27 +140,25 @@ public class CalculadoraSwing {
     }
 
     private int getOperatorPrecedence(char operator) {
-        switch (operator) {
-            case '+':
-            case '-':
-                return 1;
-            case '*':
-            case '/':
-                return 2;
-            default:
-                return 0;
-        }
+        return switch (operator) {
+            case '+', '-' -> 1;
+            case '*', '/' -> 2;
+            default -> 0;
+        };
     }
 
     private double performOperation(double a, double b, char operator) {
         switch (operator) {
-            case '+':
+            case '+' -> {
                 return a + b;
-            case '-':
+            }
+            case '-' -> {
                 return a - b;
-            case '*':
+            }
+            case '*' -> {
                 return a * b;
-            case '/':
+            }
+            case '/' -> {
                 if (b != 0) {
                     return a / b;
                 } else {
@@ -170,13 +166,15 @@ public class CalculadoraSwing {
                     isResultDisplayed = true;
                     return 0;
                 }
-            default:
+            }
+            default -> {
                 return 0;
+            }
         }
     }
 
     private void calculateResult() {
-        if (currentNumber.length() > 0) {
+        if (!currentNumber.isEmpty()) {
             double currentValue = Double.parseDouble(currentNumber.toString());
             operandStack.push(currentValue);
             currentNumber.setLength(0);
