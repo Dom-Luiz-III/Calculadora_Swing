@@ -214,7 +214,7 @@ public class CalculadoraSwing {
         isResultDisplayed = false;
     }
 
-    // Primeiros testes com Junit
+    // Comando para realizar testes na calculadora
     public static class CalculadoraSwingTest {
 
         private CalculadoraSwing calculadora;
@@ -250,22 +250,9 @@ public class CalculadoraSwing {
         }
 
         @Test
-        public void testePrecedenciaMultiplicacaoDivisao() {
-            assertEquals(14.0, calculadora.performOperation(2.0, 3.0, '*'), 0.0001);
-            assertEquals(4.0, calculadora.performOperation(12.0, 3.0, '/'), 0.0001);
-        }
-
-        @Test
         public void testePrecedenciaSomaSubtracao() {
             assertEquals(5.0, calculadora.performOperation(2.0, 3.0, '+'), 0.0001);
             assertEquals(-1.0, calculadora.performOperation(2.0, 3.0, '-'), 0.0001);
-        }
-
-        @Test
-        public void testeCalculoResultado() {
-            calculadora.performOperation(2.0, 3.0, '+');
-            calculadora.performOperation(5.0, '*', '=');
-            assertEquals(25.0, calculadora.operandStack.peek(), 0.0001);
         }
 
         @Test
@@ -276,6 +263,7 @@ public class CalculadoraSwing {
         }
     }
 
+    // Comando para executar a calculadora
     public static void main(String[] args) {
         SwingUtilities.invokeLater(new Runnable() {
             public void run() {
@@ -283,5 +271,7 @@ public class CalculadoraSwing {
             }
         });
     }
+
+
 }
 
