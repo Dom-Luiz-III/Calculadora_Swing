@@ -7,15 +7,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
 
-/*
 import org.junit.*;
+import org.junit.experimental.runners.Enclosed;
+import org.junit.runner.RunWith;
+
 import static org.junit.Assert.*;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import example.util.Calculator;
-import org.junit.jupiter.api.Test;
- */
 
-
+@RunWith(Enclosed.class)
 public class CalculadoraSwing {
     private final JTextField textField;
     private final JTextArea historyTextArea;
@@ -217,8 +215,7 @@ public class CalculadoraSwing {
     }
 
     // Primeiros testes com Junit
-    /*
-    public class CalculadoraSwingTest {
+    public static class CalculadoraSwingTest {
 
         private CalculadoraSwing calculadora;
 
@@ -278,7 +275,6 @@ public class CalculadoraSwing {
             assertEquals(0, calculadora.operandStack.size());
         }
     }
-    */
 
     public static void main(String[] args) {
         SwingUtilities.invokeLater(new Runnable() {
