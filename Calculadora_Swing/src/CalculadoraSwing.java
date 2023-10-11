@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
 
+// Para testar com Junit é necessário baixar ele no seu IDE na versão 4
 import org.junit.*;
 import org.junit.experimental.runners.Enclosed;
 import org.junit.runner.RunWith;
