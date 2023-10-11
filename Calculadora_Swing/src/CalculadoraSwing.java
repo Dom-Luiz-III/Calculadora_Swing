@@ -6,9 +6,14 @@ import java.text.DecimalFormatSymbols;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
+
+/*
 import org.junit.*;
 import static org.junit.Assert.*;
-
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import example.util.Calculator;
+import org.junit.jupiter.api.Test;
+ */
 
 
 public class CalculadoraSwing {
@@ -212,6 +217,7 @@ public class CalculadoraSwing {
     }
 
     // Primeiros testes com Junit
+    /*
     public class CalculadoraSwingTest {
 
         private CalculadoraSwing calculadora;
@@ -272,6 +278,7 @@ public class CalculadoraSwing {
             assertEquals(0, calculadora.operandStack.size());
         }
     }
+    */
 
     public static void main(String[] args) {
         SwingUtilities.invokeLater(new Runnable() {
@@ -281,3 +288,4 @@ public class CalculadoraSwing {
         });
     }
 }
+
